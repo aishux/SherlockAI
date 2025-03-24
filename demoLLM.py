@@ -1,5 +1,4 @@
-from langchain.chat_models import AzureChatOpenAI
-from langchain.schema import HumanMessage
+from langchain_openai import AzureChatOpenAI
 
 # Azure OpenAI Configuration
 AZURE_OPENAI_ENDPOINT = "https://aishu-m8m23xc2-eastus2.cognitiveservices.azure.com/"
