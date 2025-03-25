@@ -84,20 +84,15 @@ class GremlinGraph(GraphStore):
         """
         Refreshes the Gremlin graph schema information.
         """
-        vertex_schema = self.client.submit("g.V().label().dedup()").all().result()
-        edge_schema = self.client.submit("g.E().label().dedup()").all().result()
-        vertex_properties = (
-            self.client.submit(
-                "g.V().group().by(label).by(properties().label().dedup().fold())"
-            )
-            .all()
-            .result()[0]
-        )
+        vertex_schema = ["crime","location","crime_type","criminal","district","date","hour"]
+        edge_schema = ["located_at","is_type","occurred_at_hour","occurred_on_date","involved_criminal","located_in_district"]
+        vertex_properties = '''[{"crime":["crime_id","crime_type"],"location":["location","crime_type"],"crime_type":["crime_type"],"criminal":["name","crime_type"],"district":["district","crime_type"],"date":["date","crime_type"],"hour":["hour","crime_type"]}]'''
 
         self.structured_schema = {
             "vertex_labels": vertex_schema,
             "edge_labels": edge_schema,
-            "vertice_props": vertex_properties,
+            "vertice_props": vertex_properties
+
         }
 
         self.schema = "\n".join(
