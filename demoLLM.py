@@ -1,8 +1,8 @@
 from langchain_openai import AzureChatOpenAI
 
 # Azure OpenAI Configuration
-AZURE_OPENAI_ENDPOINT = "https://aishu-m8m23xc2-eastus2.cognitiveservices.azure.com/"
-AZURE_OPENAI_KEY = "2TpUnxlwFmgMU5xCyFc4HncL43stei4En4SRL6KbD6oH5062zE7hJQQJ99BCACHYHv6XJ3w3AAAAACOGWq6g"
+AZURE_OPENAI_ENDPOINT = "https://aishu-m8q3ed4m-swedencentral.cognitiveservices.azure.com/"
+AZURE_OPENAI_KEY = "028qDuTdd4Z5y0nsdbVns8ZesZeQxt4NEQmW33BObOs7cLO9gIteJQQJ99BCACfhMk5XJ3w3AAAAACOGWE1L"
 AZURE_DEPLOYMENT_NAME = "gpt-4o"
 
 # Initialize the Azure Chat Model in LangChain
