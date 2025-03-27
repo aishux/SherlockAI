@@ -10,9 +10,11 @@ client = AzureOpenAI(
     api_key="028qDuTdd4Z5y0nsdbVns8ZesZeQxt4NEQmW33BObOs7cLO9gIteJQQJ99BCACfhMk5XJ3w3AAAAACOGWE1L" 
 )
 
+user_query = "is 35 years old, medium brown skin, sharp jawline, thin lips, slightly crooked nose, short curly black hair, dark brown eyes, wearing a dark hoodie"
+
 result = client.images.generate(
     model="dall-e-3", 
-    prompt = "Do only as instructed. Now generate a single portrait sketch of a muscular man in his early 30s with a square jawline, stubble, and short buzzed hair. He is wearing a tank top, revealing a tattoo on his right shoulder. His eyes are focused, and his expression is serious. Plain background.",
+    prompt = f"Forensic sketch of a suspect, drawn in realistic colourful pencil sketch style, facing forward, with strictly no extra elements like pencils or brushes. The person {user_query}. The sketch should look like it was drawn by a professional forensic artist for a police investigation. No background, white paper backdrop, only the head and shoulders visible, slightly shaded pencil work. Style: colourful, hyper-realistic, official police sketch, it should be front facing",
     n=1
 
 )
@@ -57,4 +59,10 @@ Prompts used:
 
 5. Do only as instructed. Now generate a single portrait sketch of a muscular man in his early 30s with a square jawline, stubble, and short buzzed hair. He is wearing a tank top, revealing a tattoo on his right shoulder. His eyes are focused, and his expression is serious. Plain background.
 
+
+#Hand sketch of a person, drawn in realistic colourful pencil sketch style, facing forward. A old woman in her mid-60s with light brown skin, a sharp jawline, very thin lips, a very broad nose, thin brown hair, and black eyes. The sketch should look like it was drawn by a professional artist for a research. No background, white paper backdrop, only the head and shoulders visible, slightly shaded pencil work. Style: colourful, hyper-realistic, official research sketch with no extra elements.
+
+#Potrait hand sketch drawn in realistic colourful pencil sketch style, facing forward. A old woman in her mid-60s with light brown skin, a sharp jawline, very thin lips, a very broad nose, thin brown hair, and black eyes. The portrait is in realistic pencil sketch style, colorful but soft, head and shoulders only, no background, drawn on white paper. The style is detailed and professional like hyper-realistic illustration
+
+# Forensic sketch of a female suspect, drawn in realistic colourful pencil sketch style, facing forward. The person is in mid 20 years old, fair bright skin, sharp jawline, thick lips, sharp nose, short curly brown hair, blue eyes. The sketch should look like it was drawn by a professional forensic artist for a police investigation. No background, white paper backdrop, only the head and shoulders visible, slightly shaded pencil work. Style: colourful, hyper-realistic, official police sketch.
 '''
