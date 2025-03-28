@@ -8,7 +8,7 @@ from io import BytesIO
 client = AzureOpenAI(
     api_version="2025-01-01-preview",  
     azure_endpoint="https://aishu-m8q3ed4m-swedencentral.cognitiveservices.azure.com/",
-    api_key="028qDuTdd4Z5y0nsdbVns8ZesZeQxt4NEQmW33BObOs7cLO9gIteJQQJ99BCACfhMk5XJ3w3AAAAACOGWE1L" 
+    api_key="" 
 )
 
 def generate_forensic_sketch(user_query: str) -> Image.Image:

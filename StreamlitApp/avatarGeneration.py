@@ -30,7 +30,7 @@ def _authenticate():
         token = credential.get_token('https://cognitiveservices.azure.com/.default')
         return {'Authorization': f'Bearer {token.token}'}
     else:
-        SUBSCRIPTION_KEY = "36bzQyzStJA86qIe0XKmW4Pa98FX3veGfSVfvnNnkK461Ek5I7JfJQQJ99BCACfhMk5XJ3w3AAAAACOGmFWa"
+        SUBSCRIPTION_KEY = ""
         return {'Ocp-Apim-Subscription-Key': SUBSCRIPTION_KEY}
 
 def submit_synthesis(job_id: str, given_content: str):

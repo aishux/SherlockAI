@@ -18,7 +18,7 @@ ssl_context = ssl.create_default_context(cafile=certifi.where())
 
 # Cosmos DB Config
 COSMOS_DB_ENDPOINT = 'wss://sherlock-ai-account.gremlin.cosmos.azure.com:443/'
-COSMOS_DB_PRIMARY_KEY = 'cjLqpPhvEE5F9pLrIG82jZ4ie87UVsJVs1XRJAV1lmxIri5VyQ3uS4tgX505AlouYjDqfeAYGkZBACDbf3PkJw=='
+COSMOS_DB_PRIMARY_KEY = '=='
 DATABASE = 'sherlock-db'
 GRAPH = 'sherlock-ai-graph'
 
@@ -31,7 +31,7 @@ graph = GremlinGraph(
 
 # Azure OpenAI Config
 AZURE_OPENAI_ENDPOINT = "https://aishu-m8q3ed4m-swedencentral.cognitiveservices.azure.com/"
-AZURE_OPENAI_KEY = "028qDuTdd4Z5y0nsdbVns8ZesZeQxt4NEQmW33BObOs7cLO9gIteJQQJ99BCACfhMk5XJ3w3AAAAACOGWE1L"
+AZURE_OPENAI_KEY = ""
 AZURE_DEPLOYMENT_NAME = "gpt-4o"
 
 llm = AzureChatOpenAI(
