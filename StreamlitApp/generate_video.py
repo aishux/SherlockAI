@@ -31,16 +31,14 @@ client = AzureOpenAI(
 
 # Step 1: Scene Breakdown using GPT-4o
 def breakdown_scene(scene_description):
-    system_prompt = """You are a cinematic storyboard assistant. Your task is to break down the given natural language crime scene into a maximum of 5 brief frame descriptions suitable for image generation. Make it consistent and use repetetive desriptions to maintain consistency in image generation.
-
+    system_prompt = """You are a cinematic storyboard assistant. Your task is to break down the given natural language crime scene into a maximum of 5 brief frame descriptions suitable for image generation.
+    Make sure each frame consistently describes the same background and the same character appearance in full detail.
     Rules:
     - All frames must be visually descriptive and adhere strictly to responsible AI guidelines.
-    - Avoid any content that may be considered inappropriate or offensive. Rephrase violent or sensitive terms: 
-    - Use "red liquid" instead of "blood"
-    - Do not mention words like "kill", "murder", or "victim"
-    - Do not label people as "criminal", "suspect", or "victim"
-    - Create a storyline with named characters. Use names like Alex, Jamie, or Taylor to refer to characters consistently across frames.
-    - Use a single consistent background and mention it in every scene in full text so as to provide these images to dalle-3 can generate consistent backgrounds.
+    - Rephrase violent or sensitive terms: Use "red liquid" instead of "blood". Avoid words like "kill", "murder", "suspect" or "victim"
+    - Create a coherent storyline.
+    - Use a single consistent background and mention this full background explicitly in every scene.
+    - Describe character appearance in full in every scene.
     - Each scene description must be detailed, but concise (1 to 2 sentences), and separated by `///`.
     - Avoid meta-language, just list the scenes."""
 
@@ -87,6 +85,7 @@ def generate_crime_video(scene_description, log_placeholder):
 
                 image_paths.append(image_path)
             except Exception as e:
+                print("Error generating image" + e)
                 continue
 
             counter += 1
@@ -101,15 +100,13 @@ def generate_crime_video(scene_description, log_placeholder):
         avatar_video_name = generate_avatar(narration_response)
 
         avatar_clip = VideoFileClip(avatar_video_name).resized(0.25)
-        avatar_clip_duration = avatar_clip.duration
         avatar_clip = avatar_clip.with_position(("right", "bottom"))
 
         log_placeholder.info("🎬 Stitching video...")
 
         # Step 4: Create video from images
         video_blob = BytesIO()
-        fps_value = len(image_paths) / avatar_clip_duration
-
+        fps_value = 0.18
         scene_clip = ImageSequenceClip(image_paths, fps=fps_value)
 
         scene_clip.write_videofile("generated_content/scene_enact.mp4", codec="libx264", audio=False)

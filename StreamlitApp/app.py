@@ -27,6 +27,7 @@ if tabs == "🧠 Query Criminal Graph":
             st.session_state.right_panel = []
 
         if st.button("Submit", use_container_width=True):
+            st.session_state.chat_response = "."
             reasoning_placeholder.empty()
             st.session_state.chat_response = decision_maker(user_query, reasoning_placeholder)
 
@@ -57,22 +58,22 @@ elif tabs == "✏️ Generate Sketch":
             with open("lottie-animation.json", "r") as f:
                 lottie_sketch = json.load(f)
 
-            with st_lottie(lottie_sketch, speed=1, width=300, height=300, key="sketch_anim"):
+            st_lottie(lottie_sketch, speed=1, width=300, height=300, key="sketch_anim")
 
-                user_query = f"is a {gender} who is {age} years old, {skin_tone.lower()} skin, {hair_color.lower()} hair, {eye_color.lower()} eyes"
-                if extra_desc.strip():
-                    user_query += f", {extra_desc.strip()}"
+            user_query = f"is a {gender} who is {age} years old, {skin_tone.lower()} skin, {hair_color.lower()} hair, {eye_color.lower()} eyes"
+            if extra_desc.strip():
+                user_query += f", {extra_desc.strip()}"
 
-                sketch = generate_forensic_sketch(user_query)
+            sketch = generate_forensic_sketch(user_query)
 
-                st.image(sketch, caption="👤 Forensic Sketch", width=500)
+            st.image(sketch, caption="👤 Forensic Sketch", width=500)
 
-                # Download button
-                buffered = BytesIO()
-                sketch.save(buffered, format="PNG")
-                b64_img = base64.b64encode(buffered.getvalue()).decode()
-                href = f'<a href="data:image/png;base64,{b64_img}" download="forensic_sketch.png">📥 Download Sketch</a>'
-                st.markdown(href, unsafe_allow_html=True)
+            # Download button
+            buffered = BytesIO()
+            sketch.save(buffered, format="PNG")
+            b64_img = base64.b64encode(buffered.getvalue()).decode()
+            href = f'<a href="data:image/png;base64,{b64_img}" download="forensic_sketch.png">📥 Download Sketch</a>'
+            st.markdown(href, unsafe_allow_html=True)
 elif tabs == "🎬 Enactment Video":
     st.title("Crime Scene Reenactment")
 

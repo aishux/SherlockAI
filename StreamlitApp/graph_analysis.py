@@ -47,7 +47,8 @@ This is a Chicago Crime Network stored in Azure Cosmos DB Gremlin Graph, with th
 crime node is connected to all the other nodes by the edges mentioned.
 All other nodes are having a inbound connection from crime
 Vertex labels are the following: crime,location,crime_type,criminal,district,date,hour Edge labes are the following: located_at,is_type,occurred_at_hour,occurred_on_date,involved_criminal,located_in_district Vertices have following properties: ["crime":["crime_id"],"location":["location"],"crime_type":["crime_type"],"criminal":["name"],"district":["district"],"date":["date"],"hour":["hour"]]'
-AVOID USING elementMap() in your 
+If asked to find information about given node ids then GENERATE A SINGLE QUERY to fetch all.
+DO NOT use elementMap() in your queries instead use valueMap().
 ONLY GIVE ME THE GREMLIN QUERY. DO NOT PROVIDE ANY INSTRUCTIONS.
 """
 
@@ -116,7 +117,8 @@ reasoning_log = []
 # Helper functions
 def text_to_gremlin(query: str) -> str:
     global curr_reasoning_placeholder,reasoning_log
-    gremlin_query = gremlin_chain.invoke({"input": query}).content.split("\n")[1]
+    gremlin_query = gremlin_chain.invoke({"input": query}).content
+    gremlin_query = gremlin_query.split("\n")[1]
     reasoning_log.append(f"🟢 **Gremlin Query:**\n```groovy\n{gremlin_query}\n```")
     curr_reasoning_placeholder.markdown("\n\n".join(reasoning_log))
     return graph.query(gremlin_query)
