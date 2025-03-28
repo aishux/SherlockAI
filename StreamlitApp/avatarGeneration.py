@@ -97,7 +97,7 @@ def list_synthesis_jobs(skip: int = 0, max_page_size: int = 100):
 
 def download_video(video_url):
     logger.info(f'Downloading video from: {video_url}')
-    video_name = f"avatar_video_{int(time.time())}.mp4"
+    video_name = f"generated_content/avatar_video_{int(time.time())}.mp4"
     header = _authenticate()
     response = requests.get(video_url, headers=header)
     if response.status_code < 400:

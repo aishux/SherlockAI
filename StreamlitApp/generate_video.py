@@ -8,6 +8,7 @@ import os
 from langchain_openai import AzureChatOpenAI
 from openai import AzureOpenAI
 from avatarGeneration import main as generate_avatar
+import shutil
 
 # Azure OpenAI Configuration
 AZURE_OPENAI_ENDPOINT = "https://aishu-m8q3ed4m-swedencentral.cognitiveservices.azure.com/"
@@ -50,16 +51,14 @@ def breakdown_scene(scene_description):
 # Generate Crime Scene Video
 def generate_crime_video(scene_description, log_placeholder):
     try:
-        scenes = "".join(breakdown_scene(scene_description)).split("///")
+        scenes = [scene.strip() for scene in "".join(breakdown_scene(scene_description)).split("///") if scene.strip()]
 
-        image_blobs = []
+        image_paths = []
         counter = 1
 
         # Step 2: Generate images for each scene
-        for scene in scenes[:-1]:
-            if not scene:
-                continue
-            log_placeholder.info(f"🎨 Generating image {counter}/{len(scenes)-1}...")
+        for scene in scenes:
+            log_placeholder.info(f"🎨 Generating image {counter}/{len(scenes)}...")
             try:
                 result = client.images.generate(
                     model="dall-e-3",
@@ -68,14 +67,25 @@ def generate_crime_video(scene_description, log_placeholder):
                 )
                 json_response = json.loads(result.model_dump_json())
                 image_url = json_response["data"][0]["url"]
-                print("Image URL: ", image_url)
-                generated_image = requests.get(image_url).content
 
-                img = Image.open(BytesIO(generated_image))
-                img_bytes = BytesIO()
-                img.save(img_bytes, format="PNG")
-                img_bytes.seek(0)
-                image_blobs.append(img_bytes)
+                image_dir = os.path.join(os.curdir, 'generated_content')
+
+                # If the directory doesn't exist, create it
+                if not os.path.isdir(image_dir):
+                    os.mkdir(image_dir)
+
+                image_name = f"generated_image_{counter}.png"
+
+                # Initialize the image path (note the filetype should be png)
+                image_path = os.path.join(image_dir, image_name)
+
+                # Retrieve the generated image
+                image_url = json_response["data"][0]["url"]  # extract image URL from response
+                generated_image = requests.get(image_url).content  # download the image
+                with open(image_path, "wb") as image_file:
+                    image_file.write(generated_image)
+
+                image_paths.append(image_path)
             except Exception as e:
                 continue
 
@@ -98,20 +108,22 @@ def generate_crime_video(scene_description, log_placeholder):
 
         # Step 4: Create video from images
         video_blob = BytesIO()
-        fps_value = len(image_blobs) / avatar_clip_duration
+        fps_value = len(image_paths) / avatar_clip_duration
 
-        clip = ImageSequenceClip([BytesIO(img.getvalue()) for img in image_blobs], fps=fps_value)
+        scene_clip = ImageSequenceClip(image_paths, fps=fps_value)
 
-        scene_clip = VideoFileClip(clip)
+        scene_clip.write_videofile("generated_content/scene_enact.mp4", codec="libx264", audio=False)
 
-        final_video = CompositeVideoClip([scene_clip, avatar_clip])
-        final_video.write_videofile("final_pip_output.mp4", codec="libx264")
+        scene_clip_video = VideoFileClip("generated_content/scene_enact.mp4")
 
-        with open("final_pip_output.mp4", "rb") as video_file:
+        final_video = CompositeVideoClip([scene_clip_video, avatar_clip])
+        final_video.write_videofile("generated_content/final_pip_output.mp4", codec="libx264")
+
+        with open("generated_content/final_pip_output.mp4", "rb") as video_file:
             video_blob.write(video_file.read())
 
         video_blob.seek(0)
-        # os.remove("final_pip_output.mp4")  # Clean up temporary file
+        shutil.rmtree("generated_content")  # Clean up directory
 
         return video_blob
 
